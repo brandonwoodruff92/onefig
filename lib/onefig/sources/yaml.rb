@@ -5,41 +5,23 @@ module Onefig
     class Yaml < AbstractSource
       attr_reader :path
 
-      def initialize(path)
-        @path = path.to_s
-        @loaded = false
+      def initialize(options = {})
+        @path = options[:path].to_s
+        super(options)
       end
 
-      def fetch(key)
-        data[key]
-      end
+      private
 
-      def loaded?
-        @loaded
-      end
-
-      def load!
+      def load_data_from_file
+        data = {}
         if @path && File.exist?(@path)
-          @data = YAML.load_file(@path) || {}
-        else
-          raise "Could not load file: #{@path}"
+          data = YAML.load_file(@path)
         end
-        @loaded = true
+        data
       end
 
-      def unload!
-        @loaded = false
-        @data = nil
-      end
-
-      def reload!
-        unload!
-        load!
-      end
-
-      def data
-        load! unless loaded?
-        @data
+      def data_from_source
+        load_data_from_file
       end
     end
   end

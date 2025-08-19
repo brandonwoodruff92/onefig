@@ -1,7 +1,20 @@
 module Onefig
   module Sources
     class CliFlags < AbstractSource
-      delegate :parse_cli_values?, to: :class
+      def initialize(options = {})
+        @parse_cli_values = options[:parse_cli_values] || true
+        super(options)
+      end
+
+      def parse_cli_values?
+        @parse_cli_values
+      end
+
+      private
+
+      def data_from_source
+        extract_cli_flags
+      end
 
       def extract_cli_flags
         flags = {}
@@ -33,18 +46,6 @@ module Onefig
         end
         
         flags
-      end
-
-      class << self
-        def parse_cli_values?
-          Onefig.config.sources.cli_flags.parse_cli_values
-        end
-      end
-
-      private
-
-      def build_settings
-        extract_cli_flags
       end
 
       def parse_value(value)

@@ -9,9 +9,9 @@ module Onefig
       end
 
       def load_settings!
-        source_settings = build_settings
-        raise "build_settings must return a Settings object or hash" unless source_settings.is_a?(Settings) || source_settings.is_a?(Hash)
-        @settings = source_settings.is_a?(Settings) ? source_settings : Settings.new(source_settings)
+        source_data = data_from_source
+        raise "data_from_source must return a Settings object or hash" unless source_data.is_a?(Settings) || source_data.is_a?(Hash)
+        @settings = source_data.is_a?(Settings) ? source_data : Settings.new(source_data)
         @loaded = true
         @settings
       end
@@ -32,8 +32,8 @@ module Onefig
 
       private
 
-      def build_settings
-        raise NotImplementedError, "Subclass must implement #build_settings"
+      def data_from_source
+        raise NotImplementedError, "Subclass must implement #data_from_source"
       end
     end
   end

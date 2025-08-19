@@ -9,38 +9,34 @@ module Onefig
     end
 
     def add_source(source_type, options = {})
-      source_method = "add_#{source_type}_source".to_sym
+      source_method = "#{source_type}_source".to_sym
       raise "Unknown source type: #{source_type}" unless respond_to?(source_method)
-      send(source_method, options)
-    end
-
-    def build_settings
-      root_settings = Settings.new
-      registered_sources.each do |source|
-        current_namespace_settings = root_settings
-        source_settings = source.load_settings!
-        namespaces = Array(source.namespace)
-        namespaces.each do |namespace_key|
-          current_namespace_settings[namespace_key] ||= Settings.new
-          current_namespace_settings = current_namespace_settings[namespace_key]
-        end
-        current_namespace_settings.merge!(source_settings)
-      end
-      root_settings
+      source = send(source_method, options)
+      prepend_source = options.delete(:prepend)
+      prepend_source == true ? prepend_source(source) : append_source(source)
+      source
     end
 
     private
 
-    def add_cli_flags_source(options = {})
-      @sources << Sources::CliFlags.new(options)
+    def append_source(source)
+      @sources << source
     end
 
-    def add_env_source(options = {})
-      @sources << Sources::Env.new(options)
+    def prepend_source(source)
+      @sources.unshift(source)
     end
 
-    def add_yaml_source(options = {})
-      @sources << Sources::Yaml.new(options)
+    def env_source(options = {})
+      Sources::Env.new(options)
+    end
+
+    def yaml_source(options = {})
+      Sources::Yaml.new(options)
+    end
+
+    def cli_flags_source(options = {})
+      Sources::CliFlags.new(options)
     end
   end
 end
