@@ -10,7 +10,9 @@ module Onefig
 
       def load_settings!
         source_data = data_from_source
-        raise "data_from_source must return a Settings object or hash" unless source_data.is_a?(Settings) || source_data.is_a?(Hash)
+        unless source_data.is_a?(Settings) || source_data.is_a?(Hash)
+          raise "data_from_source must return a Settings object or hash"
+        end
         @settings = source_data.is_a?(Settings) ? source_data : Settings.new(source_data)
         @loaded = true
         @settings

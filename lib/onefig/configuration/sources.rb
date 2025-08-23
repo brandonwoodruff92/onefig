@@ -3,14 +3,14 @@ module Onefig
     class Sources
       include Configurable
 
-      config(:cli_flags) { CliFlags.instance }
+      config(:cli_flags) { Configuration::CliFlags.instance }
 
-      config(:env) { Env.instance }
+      config(:env) { Configuration::Env.instance }
 
-      config(:yaml) { Yaml.instance }
+      config(:yaml) { Configuration::Yaml.instance }
 
       def register_sources(&block)
-        @source_registry ||= SourceRegistry.new
+        @source_registry ||= Onefig::SourceRegistry.new
         @source_registry.instance_eval(&block)
       end
 
