@@ -1,5 +1,4 @@
-require_relative 'lib/config/version'
-require_relative 'lib/config/dry_validation_requirements'
+require_relative 'lib/onefig/version'
 
 Gem::Specification.new do |s|
   s.name             = 'onefig'
@@ -12,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage         = 'https://github.com/brandonwoodruff92/onefig'
   s.license          = 'MIT'
 
-  s.files = Dir["{lib}/**/*", "README.md", "LICENSE.md"]
+  s.files = Dir["{lib}/**/*", "README.md", "MIT-LICENSE"]
 
   s.required_ruby_version = '>= 2.6.0'
   s.add_development_dependency 'bundler', '~> 2.0'
