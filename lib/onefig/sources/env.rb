@@ -2,13 +2,20 @@ module Onefig
   module Sources
     class Env < AbstractSource
       attr_reader :env, :prefix, :split_prefixes, :case_sensitive_matching
+      delegate :config, to: :class
 
       def initialize(options)
         @env = options[:env] || ENV
         @prefix = options[:prefix]
-        @split_prefixes = options[:split_prefixes] || false
-        @case_sensitive_matching = options[:case_sensitive_matching] || false
+        @split_prefixes = options[:split_prefixes] || config.split_prefixes
+        @case_sensitive_matching = options[:case_sensitive_matching] || config.case_sensitive_matching
         super(namespace: prefixes) if !options[:namespace]
+      end
+
+      class << self
+        def config
+          Onefig.configuration.sources.env
+        end
       end
 
       private
